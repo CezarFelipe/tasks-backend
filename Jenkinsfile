@@ -27,9 +27,10 @@ pipeline{
         stage ('Quality Gate'){
             steps{
                 bat 'echo Quality Gate'
-                sleep(60)
-                timeout(time: 1, unit: 'MINUTES')
-                withForQualityGate abortPipeline:true
+                sleep(20)
+                timeout(time: 1, unit: 'MINUTES') {
+                    withForQualityGate abortPipeline:true
+                }
             }
         }
         stage ('Deploy Server Application'){
