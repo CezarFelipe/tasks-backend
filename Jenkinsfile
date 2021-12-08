@@ -50,9 +50,18 @@ pipeline{
             steps{
                 
                 dir('frontend'){
-                    git branch: 'main', credentialsId: 'githu_login', url: 'https://github.com/CezarFelipe/tasks-frontend'
+                    git branch: 'master', credentialsId: 'githu_login', url: 'https://github.com/CezarFelipe/tasks-frontend'
                     bat 'mvn clean package'
                     deploy adapters: [tomcat8(credentialsId: 'tomcat_login', path: '', url: 'http://localhost:8001/')], contextPath: 'tasks', war: 'target/tasks.war'
+                }
+            }
+        }
+        stage ('Functional Tests'){
+            steps{
+                
+                dir('functional-test'){
+                    git branch: 'main', credentialsId: 'githu_login', url: 'https://github.com/CezarFelipe/tasks-funciotnal-test'
+                    bat 'mvn test'
                 }
             }
         }
