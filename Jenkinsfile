@@ -29,7 +29,7 @@ pipeline{
                 bat 'echo Quality Gate'
                 sleep(35)
                 timeout(time: 1, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline:true
+                    waitForQualityGate abortPipeline: true
                 }
             }
         }
