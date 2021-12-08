@@ -40,8 +40,29 @@ pipeline{
         }
         stage ('API Test'){
             steps{
-                git branch: 'main', credentialsId: 'githu_login', url: 'https://github.com/CezarFelipe/tasks-api-test'
-                bat 'mvn test'
+                dir('api-test'){
+                    git branch: 'main', credentialsId: 'githu_login', url: 'https://github.com/CezarFelipe/tasks-api-test'
+                    bat 'mvn test'
+                }
+            }
+        }
+        stage ('Build Frontend'){
+            steps{
+                dir('api-test'){
+                    git branch: 'main', credentialsId: 'githu_login', url: 'https://github.com/CezarFelipe/tasks-api-test'
+                    bat 'mvn test'
+                }
+            }
+            steps{
+                bat 'mvn clean package -DskipTests=true'
+                dir('frontend'){
+                    git branch: 'main', credentialsId: 'githu_login', url: 'https://github.com/CezarFelipe/tasks-frontend'
+                    bat 'mvn test'
+                }
+            }
+            steps{
+                bat 'echo Deploy Tomcat'
+                deploy adapters: [tomcat8(credentialsId: 'tomcat_login', path: '', url: 'http://localhost:8001/')], contextPath: 'tasks', war: 'target/tasks.war'
             }
         }
     }
