@@ -26,9 +26,16 @@ pipeline{
         }
         stage ('Quality Gate'){
             steps{
-                bat 'Quality Gate'
+                bat 'echo Quality Gate'
+                sleep(600)
                 timeout(time: 1, unit: 'MINUTES')
                 withForQualityGate abortPipeline:true
+            }
+        }
+        stage ('Deploy Server Application'){
+            steps{
+                bat 'echo Deploy Tomcat'
+                deploy adapters: [tomcat8(credentialsId: 'tomcat_login', path: '', url: 'http://localhost:8001/')], contextPath: 'tasks-backend', war: 'target/tasks-backend.war'
             }
         }
     }
