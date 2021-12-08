@@ -7,5 +7,11 @@ pipeline{
                 bat 'mvn clean package -DskipTests=true'
             }
         }
+        stage ('Unit Tests'){
+            steps{
+                bat 'echo Unit Tests'
+                bat 'mvn test'
+            }
+        }
     }
 }
