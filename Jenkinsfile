@@ -24,15 +24,6 @@ pipeline{
                 }
             }
         }
-        stage ('Quality Gate'){
-            steps{
-                bat 'echo Quality Gate'
-                sleep(35)
-                timeout(time: 1, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
-                }
-            }
-        }
         stage ('Deploy Server Application'){
             steps{
                 bat 'echo Deploy Tomcat'
