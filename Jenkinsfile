@@ -19,8 +19,19 @@ pipeline{
             }
             steps{
                 bat 'echo Sonar Analysis'
-                withSonarQubeEnv('SONAR_LOCAL'){
+                withSonarQubeEnv ('SONAR_LOCAL'){
                     bat "${scannerHome}/bin/sonar-scanner -e -Dsonar.projectKey=DeployBack -Dsonar.host.url=http://localhost:9000 -Dsonar.login=0141b0033ba4fa66f576e3937c543cb17fcc4878 -Dsonar.java.binaries=target -Dsonar.coverage.exclusions=**/.mvn/**,**/src/test/**,**/model/**,**Aplication.java,**/src/main/java/br/ce/wcaquino/taskbackend/utils/ValidationException.java,src/main/java/br/ce/wcaquino/taskbackend/controller/TaskController.java,src/main/java/br/ce/wcaquino/taskbackend/TaskBackendApplication.java,src/main/java/br/ce/wcaquino/taskbackend/controller/RootController.java"
+                }
+            }
+        }
+        stage ('Quality Gate'){
+            environment{
+                scannerHome = tool 'SONAR_SCANNER'
+            }
+            steps{
+                bat 'echo Quality Gate'
+                timeout(time: 1, unit: 'MINUTES'){
+                    waitForQualityGate abortPipeline: true
                 }
             }
         }
